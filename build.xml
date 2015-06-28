@@ -27,9 +27,6 @@
     </target>
     <target depends="init" name="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
-	<mkdir dir="com.socialapp.services/bin"/>
-	<mkdir dir="com.socialapp.services.test/bin"/>
-        <mkdir dir="bin"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="com.socialapp.services/bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="com.socialapp.services/src"/>
             <classpath refid="classpath"/>
