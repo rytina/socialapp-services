@@ -17,7 +17,7 @@
         <pathelement location="com.socialapp.services.test/libs/httpcore-4.4.1.jar"/>
         <pathelement location="bin/socialapp-services.jar"/>
     </path>
-    <target name="init">
+    <target depends="clean" name="init">
 	<mkdir dir="com.socialapp.services/bin"/>
 	<mkdir dir="com.socialapp.services.test/bin"/>
         <mkdir dir="bin"/>

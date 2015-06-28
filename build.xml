@@ -47,7 +47,7 @@
     </target>
     <target depends="build" name="test">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
+        <junit fork="yes" haltonfailure="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="com.socialapp.services.test.SocialappServicesTest" todir="${junit.output.dir}"/>
             <classpath>
