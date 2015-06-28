@@ -1,5 +1,9 @@
 package com.socialapp.services.test;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.socialapp.services.internal.callback.AQuery;
@@ -9,8 +13,20 @@ import com.socialapp.services.internal.callback.custom.ProcessableCallback;
 
 public class SocialappServicesTest {
 
+	protected String response;
+	
+	@Before
+	public void setup(){
+		response = null;
+	}
+	
+	@After
+	public void teardown(){
+		response = null;	
+	}
+
 	@Test
-	public void testAjaxCookieGet() throws InterruptedException{
+	public void testResponseIsNotNull() throws InterruptedException{
 		
 		
 		String url = "http://www.google.com";
@@ -18,10 +34,8 @@ public class SocialappServicesTest {
         
         aq.ajax(url, new ProcessableCallback<String>(null) {
 
-            public void callback(String url, String json, AjaxStatus status) {
-                
-            	System.out
-						.println("SocialappServicesTest.testAjaxCookieGet().new ProcessableCallback() {...}.callback()");
+            public void callback(String url, String resp, AjaxStatus status) {
+            	SocialappServicesTest.this.response = resp;
             }
 
 			@Override
@@ -35,9 +49,8 @@ public class SocialappServicesTest {
 			}
         });
 		
-        while(true){
-        	Thread.sleep(1000);
-        }
+        Thread.sleep(1000);
+        assertNotNull("the response must not be null!", response);
 	}
 
 }
