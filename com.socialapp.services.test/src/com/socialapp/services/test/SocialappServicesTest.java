@@ -35,7 +35,7 @@ public class SocialappServicesTest {
         aq.ajax(url, new ProcessableCallback<String>(null) {
 
             public void callback(String url, String resp, AjaxStatus status) {
-            	//SocialappServicesTest.this.response = resp;
+            	SocialappServicesTest.this.response = resp;
             }
 
 			@Override
