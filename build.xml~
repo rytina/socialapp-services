@@ -48,7 +48,7 @@
             <test name="com.socialapp.services.test.SocialappServicesTest" todir="${junit.output.dir}"/>
             <classpath>
 		 <path refid="classpath"/>
-      		 <pathelement location="testclasses"/>
+      		 <pathelement location="com.socialapp.services.test/bin"/>
 	    </classpath>
         </junit>
     </target>

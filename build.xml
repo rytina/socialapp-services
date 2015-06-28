@@ -18,6 +18,8 @@
         <pathelement location="bin"/>
     </path>
     <target name="init">
+	<mkdir dir="com.socialapp.services/bin"/>
+	<mkdir dir="com.socialapp.services.test/bin"/>
         <mkdir dir="bin"/>
     </target>
     <target name="clean">
