@@ -42,7 +42,7 @@ public class GetLoggedInMemberInterestsCallback extends ProcessableCallback<Inte
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 

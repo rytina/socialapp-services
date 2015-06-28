@@ -43,7 +43,7 @@ public class GetMemberidCallback extends AbstractGetMemberidCallback {
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 

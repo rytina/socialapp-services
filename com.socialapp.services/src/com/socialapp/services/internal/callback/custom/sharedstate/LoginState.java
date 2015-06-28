@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.cookie.Cookie;
-import org.eclipse.core.runtime.Assert;
 
 import com.socialapp.services.IGoogleCloudMessaging;
 import com.socialapp.services.IResultProcessor;
@@ -25,6 +24,7 @@ import com.socialapp.services.internal.callback.custom.GetLoggedInZipAndNameCall
 import com.socialapp.services.internal.callback.custom.ProcessableCallback;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState.LoginResult;
 import com.socialapp.services.internal.util.UrlConstants;
+import com.socialapp.services.util.Assert;
 import com.socialapp.services.util.PartnerAppConstants;
 import com.socialapp.services.util.PartnerAppFeature;
 import com.socialapp.services.util.PartnerappServiceUtils;
@@ -56,10 +56,10 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 	public void callback(String url, String object, AjaxStatus status) {
 		super.callback(url, object, status);
 		if (object == null) {
-			proc.process(LoginResult.NONE, new Object[]{});
+			finalize(LoginResult.NONE, new Object[]{});
 			return;
 		} else if (object.contains(PartnerAppConstants.WRONG_PASS)) {
-			proc.process(LoginResult.WRONG_PASS, new Object[]{});
+			finalize(LoginResult.WRONG_PASS, new Object[]{});
 			return;
 		}
 		
@@ -68,10 +68,10 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 
 		if (object.contains(UrlConstants.LOGOUT)) { // logged in successfully
 			persistCredentials(status, sessFile);
-			proc.process(LoginResult.SUCCESS, new Object[]{});
+			finalize(LoginResult.SUCCESS, new Object[]{});
 			updateUserDataOnServer();
 		}else{	// wrong email
-			proc.process(LoginResult.WRONG_EMAIL, new Object[]{});
+			finalize(LoginResult.WRONG_EMAIL, new Object[]{});
 			return;
 		}
 	}
@@ -221,7 +221,7 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 }

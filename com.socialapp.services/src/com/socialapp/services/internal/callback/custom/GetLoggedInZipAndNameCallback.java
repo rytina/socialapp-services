@@ -48,7 +48,7 @@ public class GetLoggedInZipAndNameCallback extends ProcessableCallback<Tuple<Str
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 

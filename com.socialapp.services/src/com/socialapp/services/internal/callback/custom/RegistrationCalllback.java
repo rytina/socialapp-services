@@ -40,7 +40,7 @@ public class RegistrationCalllback extends ProcessableCallback<Boolean> {
 			} catch (Throwable e) {
 				// ignore
 			}
-			resultProcessor.process(false,alertText);
+			finalize(false,alertText);
 		}
 
 	}
@@ -51,7 +51,7 @@ public class RegistrationCalllback extends ProcessableCallback<Boolean> {
 	}
 	
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return "registrations";
 	}
 }

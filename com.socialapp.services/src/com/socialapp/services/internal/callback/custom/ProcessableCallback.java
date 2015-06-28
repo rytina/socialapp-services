@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.socialapp.services.IResultProcessor;
+import com.socialapp.services.UIResultProcessor;
 import com.socialapp.services.internal.callback.AQuery;
 import com.socialapp.services.internal.callback.AbstractAjaxCallback;
 import com.socialapp.services.internal.callback.AjaxStatus;
@@ -34,11 +35,17 @@ public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implem
 
 	public void finalize(T processable, Object ...paras) {
 		if (proc != null) {
-			proc.process(processable, paras);
+			if(proc instanceof UIResultProcessor){
+				((UIResultProcessor<?>) proc).getUiExecuter().execute(proc,processable, paras);
+			}else{
+				proc.process(processable, paras);
+			}
 		}
 	}
 
 	public abstract boolean shouldLog();
+	
+	public abstract String getLogTableName();
 
 	public void log(String request, String response, AjaxStatus status) {
 		Assert.isNotNull(parameter,
@@ -50,13 +57,12 @@ public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implem
 				+ "\" perfLog=> " + perfLog.toString();
 		LogMessageCallback cb = new LogMessageCallback(null);
 		HashMap<String, String> params = new HashMap<String,String>();
-		params.put("activity", getActivityTableName());
+		params.put("activity", getLogTableName());
 		params.put("logmsg", logmsg);
 		AQuery aq = new AQuery();
 		aq.ajax(ExternalUrlConstants.LOGGING_URL, params, cb);
 	}
 	
-	public abstract String getActivityTableName();
 
 
 	private String toReadableStatusString(AjaxStatus status) {
@@ -153,7 +159,7 @@ public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implem
 			}
 
 			@Override
-			public String getActivityTableName() {
+			public String getLogTableName() {
 				return null;
 			}
 		};

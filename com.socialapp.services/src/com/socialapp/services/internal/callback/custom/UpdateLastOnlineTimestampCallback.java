@@ -71,7 +71,7 @@ public class UpdateLastOnlineTimestampCallback extends ProcessableCallback<Boole
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 	

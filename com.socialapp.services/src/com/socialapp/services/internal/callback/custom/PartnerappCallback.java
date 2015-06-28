@@ -15,7 +15,7 @@ public interface PartnerappCallback {
 		}
 
 		@Override
-		public String getActivityTableName() {
+		public String getLogTableName() {
 			return null;
 		};
 	};

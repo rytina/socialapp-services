@@ -88,7 +88,7 @@ public class GetMemberCallback extends ProcessableCallback<Member>{
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 

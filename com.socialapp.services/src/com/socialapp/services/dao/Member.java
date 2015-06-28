@@ -258,7 +258,7 @@ public class Member {
 		int chatMessageSize = htmlMessageEntries.size();
 		int beginToCount = chatMessageSize < NUMBER_OF_MESSAGES_TO_SHOW ? 0 : chatMessageSize - NUMBER_OF_MESSAGES_TO_SHOW;
 		for (int  i=beginToCount; i < chatMessageSize ; i++) {	// only return the latest 6 messages
-			chatMessageList.add(htmlMessageEntries.get(i).getValue().toString());
+			chatMessageList.add(htmlMessageEntries.get(i).toString());
 		}
 		return chatMessageList;
 	}

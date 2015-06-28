@@ -98,9 +98,7 @@ public class AQUtility {
 	}
 	
 	public static void debug(Throwable e){
-		if(debug){
 			e.printStackTrace();
-		}
 	}
 	
 	public static void report(Throwable e){
@@ -468,10 +466,5 @@ public class AQUtility {
           out[op] = op < oDataLen ? map1[o3] : '='; op++; }
        return out; 
     }
-    
-	
-	public static void post(Runnable run){
-		throw new RuntimeException("not implemented!");
-	}
 
 }

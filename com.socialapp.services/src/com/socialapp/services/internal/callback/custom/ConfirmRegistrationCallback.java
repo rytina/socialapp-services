@@ -20,9 +20,9 @@ public class ConfirmRegistrationCallback extends ProcessableCallback<Boolean> {
 	@Override
 	public void callback(String url, String object, AjaxStatus status) {
 		if(object != null){
-			resultProcessor.process(true, new Object[]{});
+			finalize(true, new Object[]{});
 		}else{
-			resultProcessor.process(false, new Object[]{});
+			finalize(false, new Object[]{});
 		}
 	}
 
@@ -32,7 +32,7 @@ public class ConfirmRegistrationCallback extends ProcessableCallback<Boolean> {
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 }

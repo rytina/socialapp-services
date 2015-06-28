@@ -97,7 +97,7 @@ public class GetMembersCallbackForSearch extends AbstractGetMembersCallback {
 	}
 	
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return "searches";
 	}
 

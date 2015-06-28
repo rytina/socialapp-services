@@ -4,7 +4,6 @@ Bundle-Name: com.partnerapp.services
 Bundle-SymbolicName: com.socialapp.services
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Andreas Rytina
-Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  libs/commons-lang3-3.1.jar,
@@ -12,5 +11,18 @@ Bundle-ClassPath: .,
  libs/jsoup-1.7.2.jar,
  libs/togglz-core-2.0.0.Final.jar,
  libs/httpclient-4.5.jar,
- libs/httpcore-4.4.1.jar
+ libs/httpcore-4.4.1.jar,
+ libs/commons-logging-1.2.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: com.socialapp.services,
+ com.socialapp.services.dao,
+ com.socialapp.services.dao.chat,
+ com.socialapp.services.dao.serviceinput,
+ com.socialapp.services.internal.callback,
+ com.socialapp.services.internal.callback.custom,
+ com.socialapp.services.internal.callback.custom.sharedstate,
+ com.socialapp.services.internal.callback.util,
+ com.socialapp.services.internal.parser,
+ com.socialapp.services.internal.util,
+ com.socialapp.services.persistence,
+ com.socialapp.services.util

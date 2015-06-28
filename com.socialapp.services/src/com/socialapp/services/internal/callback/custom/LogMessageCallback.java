@@ -21,7 +21,7 @@ public class LogMessageCallback extends ProcessableCallback<String>{
 	}
 
 	@Override
-	public String getActivityTableName() {
+	public String getLogTableName() {
 		return null;
 	}
 	

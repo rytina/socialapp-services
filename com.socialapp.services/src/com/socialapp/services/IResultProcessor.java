@@ -9,5 +9,5 @@ public interface IResultProcessor<T> {
 	};
 
 	void process(T result, Object ...params);
-
+	
 }
