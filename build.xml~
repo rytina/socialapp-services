@@ -15,7 +15,7 @@
         <pathelement location="com.socialapp.services.test/libs/commons-logging-1.2.jar"/>
         <pathelement location="com.socialapp.services.test/libs/httpclient-4.5.jar"/>
         <pathelement location="com.socialapp.services.test/libs/httpcore-4.4.1.jar"/>
-        <pathelement location="bin"/>
+        <pathelement location="bin/socialapp-services.jar"/>
     </path>
     <target name="init">
 	<mkdir dir="com.socialapp.services/bin"/>
@@ -23,28 +23,27 @@
         <mkdir dir="bin"/>
     </target>
     <target name="clean">
+	<delete dir="com.socialapp.services/bin"/>
+	<delete dir="com.socialapp.services.test/bin"/>
         <delete dir="bin"/>
     </target>
     <target depends="init" name="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
-	<mkdir dir="com.socialapp.services/bin"/>
-	<mkdir dir="com.socialapp.services.test/bin"/>
-        <mkdir dir="bin"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="com.socialapp.services/bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="com.socialapp.services/src"/>
             <classpath refid="classpath"/>
         </javac>
-	<javac debug="true" debuglevel="${debuglevel}" destdir="com.socialapp.services.test/bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="com.socialapp.services.test/src"/>
-            <classpath refid="classpath"/>
-        </javac>
-        <jar destfile="bin/socialapp-services.jar">
+	<jar destfile="bin/socialapp-services.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.socialapp.services.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="com.socialapp.services/bin"/>
         </jar>
+	<javac debug="true" debuglevel="${debuglevel}" destdir="com.socialapp.services.test/bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="com.socialapp.services.test/src"/>
+            <classpath refid="classpath"/>
+        </javac>
     </target>
     <target depends="build" name="test">
         <mkdir dir="${junit.output.dir}"/>

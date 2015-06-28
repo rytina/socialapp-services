@@ -35,6 +35,8 @@ public class SocialappServicesTest {
         aq.ajax(url, new ProcessableCallback<String>(null) {
 
             public void callback(String url, String resp, AjaxStatus status) {
+            	System.out
+						.println("SocialappServicesTest.testResponseIsNotNull(): " + resp);
             	SocialappServicesTest.this.response = resp;
             }
 
