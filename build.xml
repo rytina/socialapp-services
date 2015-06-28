@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project com.socialapp.services with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/home/andy/Schreibtisch/jar/socialapp-services.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.socialapp.services.Main"/>
+                <attribute name="Class-Path" value=". socialapp-services_lib/commons-lang3-3.1.jar socialapp-services_lib/guava-14.0.1.jar socialapp-services_lib/jsoup-1.7.2.jar socialapp-services_lib/togglz-core-2.0.0.Final.jar socialapp-services_lib/httpclient-4.5.jar socialapp-services_lib/httpcore-4.4.1.jar"/>
+            </manifest>
+            <fileset dir="/home/andy/git/socialapp-services/com.socialapp.services/bin"/>
+        </jar>
+        <delete dir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <mkdir dir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/commons-lang3-3.1.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/guava-14.0.1.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/jsoup-1.7.2.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/togglz-core-2.0.0.Final.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/httpclient-4.5.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+        <copy file="/home/andy/git/socialapp-services/com.socialapp.services/libs/httpcore-4.4.1.jar" todir="/home/andy/Schreibtisch/jar/socialapp-services_lib"/>
+    </target>
+</project>
