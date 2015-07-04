@@ -71,6 +71,23 @@ public class SocialappServicesTest extends AbstractSocialappServicesTest{
 	}
 	
 	@Test
+	public void testLoginWithWrongEmail() {
+		
+		LoginState.login(null, "xxxxxx@gmail.com", "somewrongpassword", new File(""), new IResultProcessor<LoginResult>(){
+
+			@Override
+			public void process(LoginResult result, Object... params) {
+            	SocialappServicesTest.this.response = result;				
+			}
+			
+		});
+		
+        waitForCallback();
+        assertNotNull("the response must not be null!", response);
+        assertEquals(LoginResult.WRONG_EMAIL, response);
+	}
+	
+	@Test
 	public void testRegisterWithInvalidEmail() throws UnsupportedEncodingException{
 		final String email = "ungültigeemail";
 		final String pass = "1234";
@@ -125,6 +142,63 @@ public class SocialappServicesTest extends AbstractSocialappServicesTest{
         waitForCallback();
         assertNotNull("the response must not be null!", response);
         assertEquals("Bitte gültige E-Mailadresse eingeben.", response);
+	}
+	
+	@Test
+	public void testRegisterWithInvalidPassword() throws UnsupportedEncodingException{
+		final String email = "garfield992k@gmail.com";
+		final String pass = "123";
+		
+		RegistrationCalllback registrationCallback = new RegistrationCalllback(
+				email, pass, new IResultProcessor<Boolean>() {
+
+					public void process(Boolean result,	Object... params) {
+						if(params != null && params.length > 0){
+							if(params[0] instanceof AjaxStatus){
+								SocialappServicesTest.this.status = (AjaxStatus) params[0];
+								SocialappServicesTest.this.response = result;
+							}else if(params[0] instanceof String){
+								SocialappServicesTest.this.response = params[0];
+							}
+						}
+					}
+					
+					
+
+				}){
+			@Override
+			public boolean shouldLog() {
+				return false;
+			}
+		};
+		
+		Map<String, String> params = new HashMap<String, String>();
+
+		String name = URLEncoder.encode("Müller","UTF-8");
+		params.put("name", name);
+		params.put("forename", URLEncoder.encode("Sören","UTF-8"));
+		params.put("country", URLEncoder.encode("DE","UTF-8"));
+		params.put("zip", "73575");
+		params.put("city", URLEncoder.encode("Leinzell","UTF-8"));
+		params.put("email", email);
+		params.put("email_wdh", email);
+		params.put("b_day", "17");
+		params.put("b_month", "12");
+		params.put("b_year", "1981");
+		params.put("single", "yes");
+		params.put("sex", "m");
+		params.put("password", pass);
+		params.put("password_wdh", pass);
+		params.put("agb", "1");
+		params.put("cp", SocialappServiceUtils.md5(name));
+		registrationCallback.setParameter(params);
+		registrationCallback.header("Content-Type",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		new AQuery().ajax(UrlConstants.APP_DOMAIN + UrlConstants.MITMACHEN, params, registrationCallback);
+		
+        waitForCallback();
+        assertNotNull("the response must not be null!", response);
+        assertEquals("Das Password darf nur aus folgenden Zeichen bestehen: a - Z, 0 - 9, -, _, . und muss mindestens 5 Zeichen lang sein.", response);
 	}
 
 }
