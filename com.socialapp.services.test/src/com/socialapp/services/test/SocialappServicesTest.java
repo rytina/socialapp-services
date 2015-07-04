@@ -1,30 +1,22 @@
 package com.socialapp.services.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.After;
-import org.junit.Before;
+import java.io.File;
+
 import org.junit.Test;
 
+import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.internal.callback.AQuery;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.callback.custom.ProcessableCallback;
+import com.socialapp.services.internal.callback.custom.sharedstate.LoginState;
+import com.socialapp.services.internal.callback.custom.sharedstate.LoginState.LoginResult;
 
 
-public class SocialappServicesTest {
+public class SocialappServicesTest extends AbstractSocialappServicesTest{
 
-	protected String response;
-	protected AjaxStatus status;
-	
-	@Before
-	public void setup(){
-		response = null;
-	}
-	
-	@After
-	public void teardown(){
-		response = null;	
-	}
 
 	@Test
 	public void testResponseIsNotNull() {
@@ -54,18 +46,22 @@ public class SocialappServicesTest {
         waitForCallback();
         assertNotNull("the response must not be null!", response);
 	}
+	
+	@Test
+	public void testLoginWithWrongPassword() {
+		
+		LoginState.login(null, "eliasryt@gmail.com", "somewrongpassword", new File(""), new IResultProcessor<LoginResult>(){
 
-	private void waitForCallback() {
-		for (int i = 0; i < 10; i++) { // wait at most 10 seconds
-			if(this.status != null){
-				return;
+			@Override
+			public void process(LoginResult result, Object... params) {
+            	SocialappServicesTest.this.response = result;				
 			}
-			try{
-				Thread.sleep(1000);
-			}catch(InterruptedException ex){
-				// ignore
-			}
-		}
+			
+		});
+		
+        waitForCallback();
+        assertNotNull("the response must not be null!", response);
+        assertEquals(LoginResult.WRONG_PASS, response);
 	}
 
 }

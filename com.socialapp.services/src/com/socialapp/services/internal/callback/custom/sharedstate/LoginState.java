@@ -113,10 +113,8 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 			
 			public void run() {
 				String regid = null;
-				String msg = "";
 				try {
 					regid = gcm.register(PartnerAppConstants.GSM_PROJECT_NUMBER);
-					msg = regid;
 				} catch (RuntimeException ex) {
 					System.err.println(PartnerAppFeature.WEB.toString() + " error updateUserDataOnServer in LoginStat");
 					ex.printStackTrace();
@@ -189,7 +187,9 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 		String url = APP_DOMAIN + LOGIN;
 		Map<String, Object> params = Collections.emptyMap();
 		LoginState cb = new LoginState(gcm,filesDir, resultHandler);
-		gcm.create(cb);
+		if(gcm != null){
+			gcm.create(cb);
+		}
 		if (email != null && pass != null) {
 			params = cb.initParams(email, pass);
 		}
