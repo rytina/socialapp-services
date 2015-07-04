@@ -2,7 +2,7 @@ package com.socialapp.services.dao;
 
 
 import static com.socialapp.services.internal.util.UrlConstants.APP_DOMAIN;
-import static com.socialapp.services.util.PartnerAppConstants.NUMBER_OF_MESSAGES_TO_SHOW;
+import static com.socialapp.services.util.SocialappServiceConstants.NUMBER_OF_MESSAGES_TO_SHOW;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,8 +19,8 @@ import org.jsoup.nodes.Element;
 import com.socialapp.services.dao.chat.MessageBox;
 import com.socialapp.services.dao.chat.MessageFrame;
 import com.socialapp.services.internal.parser.PartnerappParser;
-import com.socialapp.services.util.PartnerAppFeature;
-import com.socialapp.services.util.PartnerappServiceUtils;
+import com.socialapp.services.util.SocialappFeature;
+import com.socialapp.services.util.SocialappServiceUtils;
 import com.socialapp.services.util.Tuple;
 
 public class Member {
@@ -182,7 +182,7 @@ public class Member {
 		Integer[] resultArray = null;
 		String[] interestsStrArray = interests.split(",");
 		if(interestsStrArray.length > 0){
-			Map<String, Integer> idMap = PartnerappServiceUtils.getInterestNameToIdMap();
+			Map<String, Integer> idMap = SocialappServiceUtils.getInterestNameToIdMap();
 			for (int i = 0; i < interestsStrArray.length; i++) {
 				Integer interest = idMap.get(interestsStrArray[i].trim());
 				result.add(interest);
@@ -245,7 +245,7 @@ public class Member {
 				
 			}catch(Throwable e){
 				e.printStackTrace();
-				System.err.println(PartnerAppFeature.CHAT.name() +" error while resolving chat message: ");
+				System.err.println(SocialappFeature.CHAT.name() +" error while resolving chat message: ");
 			}			
 	}
 

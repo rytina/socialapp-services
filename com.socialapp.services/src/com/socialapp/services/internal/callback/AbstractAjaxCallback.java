@@ -16,18 +16,12 @@
 
 package com.socialapp.services.internal.callback;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,11 +97,9 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	private String url;
 	private String networkUrl;
-	protected Map<String, Object> params;
+	protected Map<String, String> params;
 	protected Map<String, String> headers;
 	protected Map<String, String> cookies;
-
-	private Transformer transformer;
 
 	protected String result;
 
@@ -138,7 +130,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 		whandler = null;
 		handler = null;
 		request = null;
-		transformer = null;
 	}
 
 	/**
@@ -179,24 +170,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 		SIMULATE_ERROR = error;
 	}
 
-	/**
-	 * Sets the default static transformer. This transformer should be
-	 * stateless. If state is required, use the AjaxCallback.transformer() or
-	 * AQuery.transformer().
-	 * 
-	 * Transformers are selected in the following priority: 1. Native 2.
-	 * instance transformer() 3. static setTransformer()
-	 * 
-	 * @param agent
-	 *            the default transformer to transform raw data to specified
-	 *            type
-	 */
-
-	private static Transformer st;
-
-	public static void setTransformer(Transformer transformer) {
-		st = transformer;
-	}
 
 	/**
 	 * Set a callback handler with a weak reference. Use weak handler if you do
@@ -280,23 +253,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 		return self();
 	}
 
-	/**
-	 * Set the transformer that transform raw data to desired type. If not set,
-	 * default transformer will be used.
-	 * 
-	 * Default transformer supports:
-	 * 
-	 * JSONObject, JSONArray, XmlDom, String, byte[], and Bitmap.
-	 * 
-	 * 
-	 * @param transformer
-	 *            transformer
-	 * @return self
-	 */
-	public AbstractAjaxCallback transformer(Transformer transformer) {
-		this.transformer = transformer;
-		return self();
-	}
 
 	/**
 	 * Set ajax request to be file cached.
@@ -473,9 +429,9 @@ public abstract class AbstractAjaxCallback implements Runnable {
 	 *            the value
 	 * @return self
 	 */
-	public AbstractAjaxCallback param(String name, Object value) {
+	public AbstractAjaxCallback param(String name, String value) {
 		if (params == null) {
-			params = new HashMap<String, Object>();
+			params = new HashMap<String, String>();
 		}
 		params.put(name, value);
 		return self();
@@ -490,8 +446,8 @@ public abstract class AbstractAjaxCallback implements Runnable {
 	 */
 
 	@SuppressWarnings("unchecked")
-	public AbstractAjaxCallback params(Map<String, ?> params) {
-		this.params = (Map<String, Object>) params;
+	public AbstractAjaxCallback params(Map<String, String> params) {
+		this.params = (Map<String, String>) params;
 		return self();
 	}
 
@@ -795,10 +751,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	}
 
-	private String getCacheUrl() {
-		return url;
-	}
-
 	private String getNetworkUrl(String url) {
 
 		String result = url;
@@ -818,8 +770,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 			status.source(AjaxStatus.DATASTORE).done();
 		}
 	}
-
-	private boolean reauth;
 
 	private void networkWork() {
 
@@ -896,7 +846,7 @@ public abstract class AbstractAjaxCallback implements Runnable {
 	private void network() throws IOException {
 
 		String url = this.url;
-		Map<String, Object> params = this.params;
+		Map<String, String> params = this.params;
 
 		url = getNetworkUrl(url);
 
@@ -907,18 +857,13 @@ public abstract class AbstractAjaxCallback implements Runnable {
 		} else {
 
 			if (Constants.METHOD_POST == method && params == null) {
-				params = new HashMap<String, Object>();
+				params = new HashMap<String, String>();
 			}
 
 			if (params == null) {
 				httpGet(url, status);
 			} else {
-				if (isMultiPart(params)) {
-					httpMulti(url, params, status);
-				} else {
 					httpPost(url, params, status);
-				}
-
 			}
 
 		}
@@ -1023,7 +968,7 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	}
 
-	private void httpPost(String url, Map<String, Object> params,
+	private void httpPost(String url, Map<String, String> params,
 			AjaxStatus status) throws ClientProtocolException, IOException {
 
 		AQUtility.debug("post", url);
@@ -1034,7 +979,7 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	}
 
-	private void httpPut(String url, Map<String, Object> params,
+	private void httpPut(String url, Map<String, String> params,
 			AjaxStatus status) throws ClientProtocolException, IOException {
 
 		AQUtility.debug("put", url);
@@ -1046,7 +991,7 @@ public abstract class AbstractAjaxCallback implements Runnable {
 	}
 
 	private void httpEntity(String url, HttpEntityEnclosingRequestBase req,
-			Map<String, Object> params, AjaxStatus status)
+			Map<String, String> params, AjaxStatus status)
 			throws ClientProtocolException, IOException {
 
 		// This setting seems to improve post performance
@@ -1056,25 +1001,20 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 		HttpEntity entity = null;
 
-		Object value = params.get(AQuery.POST_ENTITY);
+		String value = params.get(AQuery.POST_ENTITY);
 
-		if (value instanceof HttpEntity) {
-			entity = (HttpEntity) value;
-		} else {
 
 			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 
-			for (Map.Entry<String, Object> e : params.entrySet()) {
+			for (Map.Entry<String, String> e : params.entrySet()) {
 				value = e.getValue();
 				if (value != null) {
-					pairs.add(new BasicNameValuePair(e.getKey(), value
-							.toString()));
+					pairs.add(new BasicNameValuePair(e.getKey(), value));
 				}
 			}
 
 			entity = new UrlEncodedFormEntity(pairs, "UTF-8");
 
-		}
 
 		if (headers != null && !headers.containsKey("Content-Type")) {
 			headers.put("Content-Type",
@@ -1408,14 +1348,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	}
 
-	private File makeTempFile(File file) throws IOException {
-
-		File temp = new File(file.getAbsolutePath() + ".tmp");
-		temp.createNewFile();
-
-		return temp;
-
-	}
 
 	private void copy(InputStream is, OutputStream os, int max)
 			throws IOException {
@@ -1510,116 +1442,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 
 	}
 
-	private static final String lineEnd = "\r\n";
-	private static final String twoHyphens = "--";
-	private static final String boundary = "*****";
-
-	private static boolean isMultiPart(Map<String, Object> params) {
-
-		for (Map.Entry<String, Object> entry : params.entrySet()) {
-			Object value = entry.getValue();
-			AQUtility.debug(entry.getKey(), value);
-			if (value instanceof File || value instanceof byte[]
-					|| value instanceof InputStream)
-				return true;
-		}
-
-		return false;
-	}
-
-	private void httpMulti(String url, Map<String, Object> params,
-			AjaxStatus status) throws IOException {
-
-		AQUtility.debug("multipart", url);
-
-		HttpURLConnection conn = null;
-		DataOutputStream dos = null;
-
-		URL u = new URL(url);
-
-		Proxy py = null;
-
-		if (proxy != null) {
-			AQUtility.debug("proxy", proxy);
-			py = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-					proxy.getHostName(), proxy.getPort()));
-		} else if (proxyHandle != null) {
-			py = proxyHandle.makeProxy(this);
-		}
-
-		if (py == null) {
-			conn = (HttpURLConnection) u.openConnection();
-		} else {
-			conn = (HttpURLConnection) u.openConnection(py);
-		}
-
-		conn.setInstanceFollowRedirects(false);
-
-		conn.setConnectTimeout(NET_TIMEOUT * 4);
-
-		conn.setDoInput(true);
-		conn.setDoOutput(true);
-		conn.setUseCaches(false);
-
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Connection", "Keep-Alive");
-		conn.setRequestProperty("Content-Type",
-				"multipart/form-data;charset=utf-8;boundary=" + boundary);
-
-		if (headers != null) {
-			for (String name : headers.keySet()) {
-				conn.setRequestProperty(name, headers.get(name));
-			}
-		}
-
-		String cookie = makeCookie();
-		if (cookie != null) {
-			conn.setRequestProperty("Cookie", cookie);
-		}
-
-		dos = new DataOutputStream(conn.getOutputStream());
-
-		for (Map.Entry<String, Object> entry : params.entrySet()) {
-
-			writeObject(dos, entry.getKey(), entry.getValue());
-
-		}
-
-		dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-		dos.flush();
-		dos.close();
-
-		conn.connect();
-
-		int code = conn.getResponseCode();
-
-		String message = conn.getResponseMessage();
-
-		byte[] data = null;
-
-		String encoding = conn.getContentEncoding();
-		String error = null;
-
-		if (code < 200 || code >= 300) {
-
-			error = new String(toData(encoding, conn.getErrorStream()), "UTF-8");
-
-			AQUtility.debug("error", error);
-		} else {
-
-			data = toData(encoding, conn.getInputStream());
-		}
-
-		AQUtility.debug("response", code);
-
-		if (data != null) {
-			AQUtility.debug(data.length, url);
-		}
-
-		status.code(code).message(message).redirect(url).time(new Date())
-				.data(data).error(error).client(null);
-
-	}
 
 	private byte[] toData(String encoding, InputStream is) throws IOException {
 
@@ -1632,60 +1454,6 @@ public abstract class AbstractAjaxCallback implements Runnable {
 		return AQUtility.toBytes(is);
 	}
 
-	private static void writeObject(DataOutputStream dos, String name,
-			Object obj) throws IOException {
-
-		if (obj == null)
-			return;
-
-		if (obj instanceof File) {
-
-			File file = (File) obj;
-			writeData(dos, name, file.getName(), new FileInputStream(file));
-
-		} else if (obj instanceof byte[]) {
-			writeData(dos, name, name, new ByteArrayInputStream((byte[]) obj));
-		} else if (obj instanceof InputStream) {
-			writeData(dos, name, name, (InputStream) obj);
-		} else {
-			writeField(dos, name, obj.toString());
-		}
-
-	}
-
-	private static void writeData(DataOutputStream dos, String name,
-			String filename, InputStream is) throws IOException {
-
-		dos.writeBytes(twoHyphens + boundary + lineEnd);
-		dos.writeBytes("Content-Disposition: form-data; name=\"" + name + "\";"
-				+ " filename=\"" + filename + "\"" + lineEnd);
-
-		// added to specify type
-		dos.writeBytes("Content-Type: application/octet-stream");
-		dos.writeBytes(lineEnd);
-		dos.writeBytes("Content-Transfer-Encoding: binary");
-		dos.writeBytes(lineEnd);
-
-		dos.writeBytes(lineEnd);
-
-		AQUtility.copy(is, dos);
-
-		dos.writeBytes(lineEnd);
-
-	}
-
-	private static void writeField(DataOutputStream dos, String name,
-			String value) throws IOException {
-		dos.writeBytes(twoHyphens + boundary + lineEnd);
-		dos.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"");
-		dos.writeBytes(lineEnd);
-		dos.writeBytes(lineEnd);
-
-		byte[] data = value.getBytes("UTF-8");
-		dos.write(data);
-
-		dos.writeBytes(lineEnd);
-	}
 
 	private String makeCookie() {
 

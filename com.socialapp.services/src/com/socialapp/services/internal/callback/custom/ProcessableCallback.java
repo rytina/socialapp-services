@@ -12,14 +12,14 @@ import com.socialapp.services.internal.callback.AbstractAjaxCallback;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.util.ExternalUrlConstants;
 import com.socialapp.services.util.Assert;
-import com.socialapp.services.util.PartnerAppConstants;
 import com.socialapp.services.util.PerfLog;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 
 public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implements PartnerappCallback{
 
 	protected final IResultProcessor<T> proc;
-	private Map<String, Object> parameter;
+	private Map<String, String> parameter;
 	public final PerfLog perfLog = new PerfLog();
 	
 	protected String requestString;
@@ -52,7 +52,7 @@ public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implem
 				"because logging is active, you need to invoke setParameter() on the callback!");
 		String logmsg = "ProcessableCallback.log() request=> " + request + " "
 				+ parameter.toString() + "\nresponse=> " + (response != null ? StringUtils.substring(response, 0, 20000) : "response is null=server problem!")
-				+ "\" partnerapp-version=> " + PartnerAppConstants.PARTNER_APP_VERSION
+				+ "\" partnerapp-version=> " + SocialappServiceConstants.SOCIAL_APP_VERSION
 				+ "\" ajax-status=> " + toReadableStatusString(status)
 				+ "\" perfLog=> " + perfLog.toString();
 		LogMessageCallback cb = new LogMessageCallback(null);
@@ -142,7 +142,7 @@ public abstract class ProcessableCallback<T> extends AbstractAjaxCallback implem
 		}
 	}
 
-	public void setParameter(Map<String, Object> params) {
+	public void setParameter(Map<String, String> params) {
 		this.parameter = params;
 	}
 	

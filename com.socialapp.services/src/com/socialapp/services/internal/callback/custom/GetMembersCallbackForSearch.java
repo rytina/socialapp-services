@@ -15,7 +15,7 @@ import com.socialapp.services.dao.Member;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState;
 import com.socialapp.services.internal.parser.PartnerappParser;
 import com.socialapp.services.persistence.IDataSource;
-import com.socialapp.services.util.PartnerAppConstants;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 public class GetMembersCallbackForSearch extends AbstractGetMembersCallback {
 
@@ -61,7 +61,7 @@ public class GetMembersCallbackForSearch extends AbstractGetMembersCallback {
 
 	private int getCurrentPageNumber(String response) {
 		int currentPageNumber = 0;
-		Matcher matcher = PartnerAppConstants.ACTIVEPAGE_PATTERN
+		Matcher matcher = SocialappServiceConstants.ACTIVEPAGE_PATTERN
 				.matcher(response);
 		if (matcher.find()) {
 			String activePage = matcher.group(1);

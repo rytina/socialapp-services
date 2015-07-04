@@ -1,12 +1,12 @@
 package com.socialapp.services.internal.callback.custom;
 
 import static com.socialapp.services.internal.util.UrlConstants.CONFIRM_REGISTRATION_URL;
-import static com.socialapp.services.util.PartnerappServiceUtils.md5;
+import static com.socialapp.services.util.SocialappServiceUtils.md5;
 
 import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.internal.callback.AQuery;
 import com.socialapp.services.internal.callback.AjaxStatus;
-import com.socialapp.services.util.PartnerAppConstants;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 public class RegistrationCalllback extends ProcessableCallback<Boolean> {
 
@@ -15,7 +15,7 @@ public class RegistrationCalllback extends ProcessableCallback<Boolean> {
 	private IResultProcessor<Boolean> resultProcessor;
 
 	public RegistrationCalllback(String email, String pass, IResultProcessor<Boolean> resultProcessor) {
-		super(null);	// the processor is forwarded to the confirmation call back. Here it is null
+		super(resultProcessor);	// the processor is also forwarded to the confirmation call back. H
 		this.resultProcessor = resultProcessor;
 	}
 
@@ -23,7 +23,11 @@ public class RegistrationCalllback extends ProcessableCallback<Boolean> {
 	public void callback(String url, String html,
 			AjaxStatus status) {
 		super.callback(url, html, status);
-		if (html.contains(PartnerAppConstants.REGISTRATION_SUCCESS_TEXT)) {
+		if(status.getCode() != 200){
+			finalize(Boolean.FALSE, status);
+			return;
+		}
+		if (html.contains(SocialappServiceConstants.REGISTRATION_SUCCESS_TEXT)) {
 			
 			ConfirmRegistrationCallback confirmRegistrationCb = new ConfirmRegistrationCallback(email, pass, resultProcessor);
 			AQuery aq = new AQuery();

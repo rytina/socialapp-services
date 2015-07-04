@@ -16,22 +16,22 @@ public class ServerUtils {
 	public static void updateUserDataOnServer(String email, Integer memberID, Integer imageid, String gcmRegistrationID) {
 		try {
 			AQuery aq = new AQuery();
-			Map<String, Object> params = new HashMap<String, Object>();
+			Map<String, String> params = new HashMap<String, String>();
 			if (email != null && !email.equals("")) {
 				params.put("email", email.toString());
 			}
 			if (memberID != null && memberID > 0) {
-				params.put("memberid", memberID);
+				params.put("memberid", memberID.toString());
 			}
 			if (imageid != null && imageid > 0) {
-				params.put("imageid", imageid);
+				params.put("imageid", imageid.toString());
 			}
 			if (gcmRegistrationID != null && !gcmRegistrationID.equals("")) {
 				params.put("gcmregid", gcmRegistrationID);
 			}
 			aq.ajax(ExternalUrlConstants.CREATE_OR_UPDATE_USER_URL, params,	PartnerappCallback.NULL_CALLBACK);
 		} catch (RuntimeException e) {
-			System.err.println(PartnerAppFeature.WEB.toString() + "update user data on server failed!");
+			System.err.println(SocialappFeature.WEB.toString() + "update user data on server failed!");
 			e.printStackTrace();
 		}
 	}

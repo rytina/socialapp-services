@@ -3,7 +3,7 @@ package com.socialapp.services.dao.chat;
 import java.util.Date;
 
 import com.socialapp.services.dao.IValueObject;
-import com.socialapp.services.util.PartnerAppConstants;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 public class MessageFrame implements IValueObject{
 
@@ -30,7 +30,7 @@ public class MessageFrame implements IValueObject{
 	@Override
 	public String toString() {
 		return "["
-				+ PartnerAppConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT
+				+ SocialappServiceConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT
 						.format(date) + ", " + boxType.name() + "]";
 	}
 

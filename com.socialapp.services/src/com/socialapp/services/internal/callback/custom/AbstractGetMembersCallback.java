@@ -12,7 +12,7 @@ import com.socialapp.services.dao.Member;
 import com.socialapp.services.internal.callback.AQuery;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappFeature;
 import com.socialapp.services.util.PerfLog.PerfMeasureStep;
 
 
@@ -53,7 +53,7 @@ abstract public class AbstractGetMembersCallback extends
 			if (!entries.isEmpty()) {
 				members = createMembersListFromEntries(entries);
 			} else {
-				System.err.println(PartnerAppFeature.WEB.name() +
+				System.err.println(SocialappFeature.WEB.name() +
 						" cannot retrive entries from response!");
 			}
 			parsingResultIteratingTime = System.currentTimeMillis()
@@ -70,7 +70,7 @@ abstract public class AbstractGetMembersCallback extends
 			perfLog.log(PerfMeasureStep.membersFinalizationTime,
 					membersFinalizationTime);
 		} catch (Throwable e) {
-			System.err.println(PartnerAppFeature.WEB.name() +
+			System.err.println(SocialappFeature.WEB.name() +
 					" Error in Get Members Callback: ");
 			e.printStackTrace();
 		}
@@ -105,7 +105,7 @@ abstract public class AbstractGetMembersCallback extends
 				try {
 					internalUpdateOnlineStatus(result);
 				} catch (RuntimeException ex) {
-					System.err.println(PartnerAppFeature.WEB.toString() +
+					System.err.println(SocialappFeature.WEB.toString() +
 							" error while updating online status!");
 					ex.printStackTrace();
 				}

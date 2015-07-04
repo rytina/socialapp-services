@@ -6,7 +6,7 @@ import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.dao.Member;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.util.Assert;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappFeature;
 import com.socialapp.services.util.ServerUtils;
 
 
@@ -31,7 +31,7 @@ public class GetMemberidCallback extends AbstractGetMemberidCallback {
 					Integer.valueOf(memberID),
 					Integer.valueOf(member.getImageID()), null);
 		} catch (RuntimeException e) {
-			System.err.println(PartnerAppFeature.WEB.toString() +
+			System.err.println(SocialappFeature.WEB.toString() +
 					" update user data on server failed!");
 			e.printStackTrace();
 		}

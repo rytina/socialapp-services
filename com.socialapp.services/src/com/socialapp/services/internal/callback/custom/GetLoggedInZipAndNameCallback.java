@@ -4,7 +4,7 @@ import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState;
 import com.socialapp.services.internal.util.UrlConstants;
-import com.socialapp.services.util.PartnerAppConstants;
+import com.socialapp.services.util.SocialappServiceConstants;
 import com.socialapp.services.util.Tuple;
 
 
@@ -15,7 +15,7 @@ public class GetLoggedInZipAndNameCallback extends ProcessableCallback<Tuple<Str
 
 	public GetLoggedInZipAndNameCallback(IResultProcessor<Tuple<String, String>> proc) {
 		super(proc);
-		cookie(PartnerAppConstants.PHPSESSID, LoginState.phpsessid);
+		cookie(SocialappServiceConstants.PHPSESSID, LoginState.phpsessid);
 	}
 	
 	@Override

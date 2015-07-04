@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 
-public class PartnerAppConstants {
+public class SocialappServiceConstants {
 	
 	public enum MemberColumn{
 		image,				// 0.
@@ -19,7 +19,7 @@ public class PartnerAppConstants {
 		_id					// 8.
 	}
 	
-	public static final String PARTNER_APP_VERSION = "18.0";
+	public static final String SOCIAL_APP_VERSION = "18.0";
 	
 	public static final String PARAMETER_SEARCH_LOCATION = "PARAMETER_SEARCH_LOCATION";
 	
@@ -109,15 +109,15 @@ public class PartnerAppConstants {
 	
 private static final String DATE_TIME_FORMAT_WEBSITE = "dd.MM.yyyy HH:mm";
 	
-	public static final SimpleDateFormat DATE_TIME_FORMAT_WEBSITE_FORMAT = new SimpleDateFormat(PartnerAppConstants.DATE_TIME_FORMAT_WEBSITE,Locale.GERMANY);
+	public static final SimpleDateFormat DATE_TIME_FORMAT_WEBSITE_FORMAT = new SimpleDateFormat(SocialappServiceConstants.DATE_TIME_FORMAT_WEBSITE,Locale.GERMANY);
 
 	private static final String DATE_TIME_SECONDS_FORMAT_WEBSITE = "dd.MM.yyyy HH:mm:ss";
 	
-	public static final SimpleDateFormat DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT = new SimpleDateFormat(PartnerAppConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE,Locale.GERMANY);
+	public static final SimpleDateFormat DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT = new SimpleDateFormat(SocialappServiceConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE,Locale.GERMANY);
 	
 	private static final String DATE_TIME_FORMAT_MYSQL = "yyyy-MM-dd HH:mm:ss";
 	
-	public static final SimpleDateFormat DATE_TIME_FORMAT_MYSQL_FORMAT = new SimpleDateFormat(PartnerAppConstants.DATE_TIME_FORMAT_MYSQL,Locale.GERMANY);
+	public static final SimpleDateFormat DATE_TIME_FORMAT_MYSQL_FORMAT = new SimpleDateFormat(SocialappServiceConstants.DATE_TIME_FORMAT_MYSQL,Locale.GERMANY);
 
 	public static final int NUMBER_OF_MESSAGES_TO_SHOW = 6;
 	

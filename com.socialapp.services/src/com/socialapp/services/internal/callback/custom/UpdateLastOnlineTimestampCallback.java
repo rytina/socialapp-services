@@ -10,8 +10,8 @@ import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.dao.Member;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.util.ExternalUrlConstants;
-import com.socialapp.services.util.PartnerAppConstants;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappFeature;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 
 public class UpdateLastOnlineTimestampCallback extends ProcessableCallback<Boolean> {
@@ -35,14 +35,14 @@ public class UpdateLastOnlineTimestampCallback extends ProcessableCallback<Boole
 				int memberIndex = Integer.parseInt(splitted[0]);
 				String dateTimeString = splitted[1].trim();
 				if(!dateTimeString.equals("0")){
-					Date lastOnlineStamp = PartnerAppConstants.DATE_TIME_FORMAT_MYSQL_FORMAT.parse(dateTimeString);
+					Date lastOnlineStamp = SocialappServiceConstants.DATE_TIME_FORMAT_MYSQL_FORMAT.parse(dateTimeString);
 					changed |= members.get(memberIndex).setLastInteractionStamp(lastOnlineStamp);
 				}
 			}catch(RuntimeException ex){
-				System.err.println(PartnerAppFeature.WEB.name() + " " + WRONG_FORMAT_ERRORMSG);
+				System.err.println(SocialappFeature.WEB.name() + " " + WRONG_FORMAT_ERRORMSG);
 				ex.printStackTrace();
 			} catch (ParseException ex) {
-				System.err.println(PartnerAppFeature.WEB.name() + " " + WRONG_FORMAT_ERRORMSG);
+				System.err.println(SocialappFeature.WEB.name() + " " + WRONG_FORMAT_ERRORMSG);
 				ex.printStackTrace();
 			}
 		}
@@ -57,8 +57,8 @@ public class UpdateLastOnlineTimestampCallback extends ProcessableCallback<Boole
 	}
 	
 	
-	public Map<String, Object> getParams(){
-		Map<String, Object> paramMap = new HashMap<String, Object>();
+	public Map<String, String> getParams(){
+		Map<String, String> paramMap = new HashMap<String, String>();
 		for (int i=0; i < members.size(); i++) {
 			paramMap.put(String.format(MEMBER_POST_PARAM, i), members.get(i).getId());
 		}

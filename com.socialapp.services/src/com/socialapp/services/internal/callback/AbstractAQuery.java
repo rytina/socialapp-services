@@ -19,7 +19,6 @@ package com.socialapp.services.internal.callback;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 
 import com.socialapp.services.internal.callback.custom.ProcessableCallback;
@@ -34,7 +33,6 @@ import com.socialapp.services.internal.callback.util.Constants;
 public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Constants {
 
 	
-	private Transformer trans;
 	private int policy = Constants.CACHE_DEFAULT;
 	//private Integer policy = null;
 	private HttpHost proxy;
@@ -79,18 +77,6 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 		return (T) this;
 	}
 
-	
-	/**
-	 * Apply the transformer to convert raw data to desired object type for the next ajax request. 
-	 *
-	 * @param transformer transformer
-	 * @return self
-	 */
-	public T transformer(Transformer transformer){
-		trans = transformer;
-		return self();
-	}	
-	
 	public T policy(int cachePolicy){
 		policy = cachePolicy;
 		return self();
@@ -126,10 +112,6 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 	
 	protected <K> T invoke(ProcessableCallback<?> cb){
 				
-		if(trans != null){
-			cb.transformer(trans);
-		}
-		
 		//if(policy != null){
 			cb.policy(policy);
 		//}
@@ -146,12 +128,8 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 	}	
 	
 	protected void reset(){
-		
-		trans = null;
 		policy = CACHE_DEFAULT;
 		proxy = null;
-		
-		
 	}
 	
 	
@@ -213,7 +191,7 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 	 * 
 	 */
 	
-	public <K> T ajax(String url, Map<String, ?> params, ProcessableCallback<?> callback){
+	public <K> T ajax(String url, Map<String, String> params, ProcessableCallback<?> callback){
 		
 		callback.url(url).params(params);
 		return ajax(callback);
@@ -236,31 +214,6 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 		return ajax(callback);
 		
 	}
-	
-	/**
-	 * Ajax HTTP put.
-	 *
-	 * @param url url
-	 * @param contentHeader Content-Type header
-	 * @param type reponse type
-	 * @param callback callback
-	 * @return self
-	 * 
-	 */
-	
-	public <K> T put(String url, String contentHeader, HttpEntity entity, ProcessableCallback<?> callback){
-		
-		callback.url(url).method(AQuery.METHOD_PUT).header("Content-Type", contentHeader).param(AQuery.POST_ENTITY, entity);		
-		return ajax(callback);
-		
-	}
-	
-	public <K> T post(String url, String contentHeader, HttpEntity entity, ProcessableCallback<?> callback){
-        
-        callback.url(url).method(AQuery.METHOD_POST).header("Content-Type", contentHeader).param(AQuery.POST_ENTITY, entity);     
-        return ajax(callback);
-        
-    }
 	
 	
 	/**

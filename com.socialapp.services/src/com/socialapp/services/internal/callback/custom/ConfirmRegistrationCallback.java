@@ -22,7 +22,7 @@ public class ConfirmRegistrationCallback extends ProcessableCallback<Boolean> {
 		if(object != null){
 			finalize(true, new Object[]{});
 		}else{
-			finalize(false, new Object[]{});
+			finalize(false, status);
 		}
 	}
 

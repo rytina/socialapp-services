@@ -12,8 +12,8 @@ import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.dao.chat.MessageFrame;
 import com.socialapp.services.internal.callback.AjaxStatus;
 import com.socialapp.services.internal.parser.PartnerappDomConstants;
-import com.socialapp.services.util.PartnerAppConstants;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappServiceConstants;
+import com.socialapp.services.util.SocialappFeature;
 import com.socialapp.services.util.Tuple;
 
 
@@ -35,21 +35,21 @@ public class GetChatMessageCallback extends ProcessableCallback<String> {
 			Element mailTr = mail.parent().parent();
 			Element dateTr = mailTr.previousElementSibling().previousElementSibling();
 			String dateWithSeconds = dateTr.child(1).ownText();
-			Date date = PartnerAppConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT.parse(dateWithSeconds);
+			Date date = SocialappServiceConstants.DATE_TIME_SECONDS_FORMAT_WEBSITE_FORMAT.parse(dateWithSeconds);
 			MessageFrame messageFrame = chatMessage.getKey();
 			messageFrame.setDate(date);
 			String resolved = mail.text();
 			if (resolved.contains("\n>")) { // remove the quoted text
-				Matcher matcher = PartnerAppConstants.QUOTED_TEXT_PATTERN
+				Matcher matcher = SocialappServiceConstants.QUOTED_TEXT_PATTERN
 						.matcher(resolved);
 				resolved = matcher.replaceAll("");
 			}
 			chatMessage.setValue(resolved);
 		} catch (RuntimeException ex) {
-			System.err.println(PartnerAppFeature.CHAT.name() + " error while retriveing chat message");
+			System.err.println(SocialappFeature.CHAT.name() + " error while retriveing chat message");
 			ex.printStackTrace();
 		} catch (ParseException e) {
-			System.err.println(PartnerAppFeature.CHAT.name() + " error while parsing date of chat message");
+			System.err.println(SocialappFeature.CHAT.name() + " error while parsing date of chat message");
 			e.printStackTrace();
 		}
 	}

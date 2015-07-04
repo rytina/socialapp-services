@@ -2,7 +2,7 @@ package com.socialapp.services.internal.callback.custom.sharedstate;
 
 import static com.socialapp.services.internal.util.UrlConstants.APP_DOMAIN;
 import static com.socialapp.services.internal.util.UrlConstants.LOGIN;
-import static com.socialapp.services.util.PartnerAppConstants.PHPSESSID;
+import static com.socialapp.services.util.SocialappServiceConstants.PHPSESSID;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,10 +25,10 @@ import com.socialapp.services.internal.callback.custom.ProcessableCallback;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState.LoginResult;
 import com.socialapp.services.internal.util.UrlConstants;
 import com.socialapp.services.util.Assert;
-import com.socialapp.services.util.PartnerAppConstants;
-import com.socialapp.services.util.PartnerAppFeature;
-import com.socialapp.services.util.PartnerappServiceUtils;
 import com.socialapp.services.util.ServerUtils;
+import com.socialapp.services.util.SocialappFeature;
+import com.socialapp.services.util.SocialappServiceConstants;
+import com.socialapp.services.util.SocialappServiceUtils;
 import com.socialapp.services.util.Tuple;
 
 public class LoginState extends ProcessableCallback<LoginResult> {
@@ -58,13 +58,13 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 		if (object == null) {
 			finalize(LoginResult.NONE, new Object[]{});
 			return;
-		} else if (object.contains(PartnerAppConstants.WRONG_PASS)) {
+		} else if (object.contains(SocialappServiceConstants.WRONG_PASS)) {
 			finalize(LoginResult.WRONG_PASS, new Object[]{});
 			return;
 		}
 		
 		File sessFile = new File(filesDir,
-				PartnerAppConstants.CREDENTIALS__FILE);
+				SocialappServiceConstants.CREDENTIALS__FILE);
 
 		if (object.contains(UrlConstants.LOGOUT)) { // logged in successfully
 			persistCredentials(status, sessFile);
@@ -90,7 +90,7 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 								try{
 									LoginState.memberID = Integer.parseInt(memberid);
 								}catch(NumberFormatException ex){
-									System.err.println(PartnerAppFeature.LOGIN.name() + " invalid format of memberID!");
+									System.err.println(SocialappFeature.LOGIN.name() + " invalid format of memberID!");
 									ex.printStackTrace();
 								}
 								doUpdateUserDataOnServer(email, memberid);
@@ -114,21 +114,21 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 			public void run() {
 				String regid = null;
 				try {
-					regid = gcm.register(PartnerAppConstants.GSM_PROJECT_NUMBER);
+					regid = gcm.register(SocialappServiceConstants.GSM_PROJECT_NUMBER);
 				} catch (RuntimeException ex) {
-					System.err.println(PartnerAppFeature.WEB.toString() + " error updateUserDataOnServer in LoginStat");
+					System.err.println(SocialappFeature.WEB.toString() + " error updateUserDataOnServer in LoginStat");
 					ex.printStackTrace();
 
 				}				
 				if(StringUtils.isEmpty(memberid)){
-					System.err.println(PartnerAppFeature.WEB.name() + " memberid is empty!");
+					System.err.println(SocialappFeature.WEB.name() + " memberid is empty!");
 					return;
 				}
 				int memberidAsInt = 0;
 				try{
 					memberidAsInt = Integer.parseInt(memberid);
 				}catch(RuntimeException ex){
-					System.err.println(PartnerAppFeature.WEB.name() + " memberid is not a number!");
+					System.err.println(SocialappFeature.WEB.name() + " memberid is not a number!");
 					ex.printStackTrace();
 				}
 				ServerUtils.updateUserDataOnServer(email, memberidAsInt, null, regid);
@@ -139,7 +139,7 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 	private void setDefaultInterest() {
 		AQuery aq = new AQuery();
 		ProcessableCallback<String> cb = ProcessableCallback.create();
-		cb.cookie(PartnerAppConstants.PHPSESSID, LoginState.phpsessid);
+		cb.cookie(SocialappServiceConstants.PHPSESSID, LoginState.phpsessid);
 		aq.ajax(UrlConstants.SET_DEFAULT_INTEREST_URL, cb);
 	}
 
@@ -185,7 +185,7 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 	public static void login(IGoogleCloudMessaging gcm, String email,String pass, File filesDir, IResultProcessor<LoginResult> resultHandler) {
 		checkState(email, pass);
 		String url = APP_DOMAIN + LOGIN;
-		Map<String, Object> params = Collections.emptyMap();
+		Map<String, String> params = Collections.emptyMap();
 		LoginState cb = new LoginState(gcm,filesDir, resultHandler);
 		if(gcm != null){
 			gcm.create(cb);
@@ -193,7 +193,7 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 		if (email != null && pass != null) {
 			params = cb.initParams(email, pass);
 		}
-		cb.timeout(PartnerAppConstants.TIMEOUT_SHORT);
+		cb.timeout(SocialappServiceConstants.TIMEOUT_SHORT);
 		new AQuery().ajax(url, params, cb);
 	}
 
@@ -206,12 +206,12 @@ public class LoginState extends ProcessableCallback<LoginResult> {
 		}
 	}
 
-	private Map<String, Object> initParams(String email, String pass) {
+	private Map<String, String> initParams(String email, String pass) {
 		credentials = new Credentials(email, pass);
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(UrlConstants.POST_KEY_EMAIL, email);
 		params.put(UrlConstants.POST_KEY_PASS, pass);
-		params.put(UrlConstants.POST_KEY_HASH, PartnerappServiceUtils.md5(email));
+		params.put(UrlConstants.POST_KEY_HASH, SocialappServiceUtils.md5(email));
 		return params;
 	}
 

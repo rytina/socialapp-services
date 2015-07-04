@@ -26,8 +26,8 @@ import com.socialapp.services.internal.callback.custom.GetChatMessageCallback;
 import com.socialapp.services.internal.callback.custom.sharedstate.LoginState;
 import com.socialapp.services.internal.util.UrlConstants;
 import com.socialapp.services.persistence.IDataSource;
-import com.socialapp.services.util.PartnerAppConstants;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappFeature;
+import com.socialapp.services.util.SocialappServiceConstants;
 import com.socialapp.services.util.Tuple;
 
 
@@ -112,7 +112,7 @@ public class PartnerappParser {
 		int result = 0;
 		try {
 			String location = entry.getElementsByTag("td").get(0).ownText();
-			Matcher matcher = PartnerAppConstants.ZIP_PATTERN.matcher(location);
+			Matcher matcher = SocialappServiceConstants.ZIP_PATTERN.matcher(location);
 			if (matcher.find()) {
 				location = matcher.group();
 				result = Integer.parseInt(location);
@@ -330,13 +330,13 @@ public class PartnerappParser {
 				box = UrlConstants.POST_VALUE_OUTBOX;
 			}
 			String url = APP_DOMAIN + MAILBOX;
-			Map<String, Object> params = new HashMap<String, Object>();
+			Map<String, String> params = new HashMap<String, String>();
 			AQuery aq = new AQuery();
 			GetChatMessageCallback callback = new GetChatMessageCallback(
 					IResultProcessor.NULL_PROCESSOR, chatMessage);
 
-			params = new HashMap<String, Object>();
-			callback.cookie(PartnerAppConstants.PHPSESSID, LoginState.phpsessid);
+			params = new HashMap<String, String>();
+			callback.cookie(SocialappServiceConstants.PHPSESSID, LoginState.phpsessid);
 			params.put(UrlConstants.POST_KEY_FOLDER, box);
 			params.put(UrlConstants.POST_KEY_ACTION,
 					UrlConstants.POST_VALUE_READ);
@@ -351,9 +351,9 @@ public class PartnerappParser {
 		Date date = null;
 		String dateString = entry.getElementsByTag("td").get(4).ownText();
 		try {
-			date = PartnerAppConstants.DATE_TIME_FORMAT_WEBSITE_FORMAT.parse(dateString);
+			date = SocialappServiceConstants.DATE_TIME_FORMAT_WEBSITE_FORMAT.parse(dateString);
 		} catch (ParseException e) {
-			System.err.println(PartnerAppFeature.CHAT.name()+ " couldn't parse date from string: " +dateString);
+			System.err.println(SocialappFeature.CHAT.name()+ " couldn't parse date from string: " +dateString);
 			e.printStackTrace();
 		}
 		return date;

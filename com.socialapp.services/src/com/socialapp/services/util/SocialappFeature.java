@@ -2,7 +2,7 @@ package com.socialapp.services.util;
 
 
 
-public enum PartnerAppFeature implements org.togglz.core.Feature{
+public enum SocialappFeature implements org.togglz.core.Feature{
 	UNKNOWN,
 	CORE,
 	LOGIN, 

@@ -2,7 +2,7 @@ package com.socialapp.services.internal.callback.custom;
 
 import com.socialapp.services.IResultProcessor;
 import com.socialapp.services.internal.callback.AjaxStatus;
-import com.socialapp.services.util.PartnerAppConstants;
+import com.socialapp.services.util.SocialappServiceConstants;
 
 
 public class SendMessageCallback extends ProcessableCallback<String>{
@@ -25,7 +25,7 @@ public class SendMessageCallback extends ProcessableCallback<String>{
 			finalize(object);
 			break;
 		case SECOND:
-			finalize(PartnerAppConstants.STATUS_OK);
+			finalize(SocialappServiceConstants.STATUS_OK);
 			break;
 		}
 	}

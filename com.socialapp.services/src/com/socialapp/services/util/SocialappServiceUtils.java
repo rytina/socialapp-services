@@ -11,7 +11,7 @@ import java.util.Map;
 import com.socialapp.services.dao.Interest;
 
 
-public class PartnerappServiceUtils {
+public class SocialappServiceUtils {
 	
 	public static List<Interest> getAllInterests() {
 		List<Interest> list = new ArrayList<Interest>();

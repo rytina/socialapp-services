@@ -14,7 +14,7 @@ import com.socialapp.services.dao.Member;
 import com.socialapp.services.dao.chat.MessageBox;
 import com.socialapp.services.internal.parser.PartnerappDomConstants;
 import com.socialapp.services.internal.parser.PartnerappParser;
-import com.socialapp.services.util.PartnerAppFeature;
+import com.socialapp.services.util.SocialappFeature;
 import com.socialapp.services.util.Tuple;
 
 
@@ -64,7 +64,7 @@ public class GetMembersCallbackForChats extends AbstractGetMembersCallback {
 				createOrUpdateChatPartner(tmpMemory, result,
 						new Tuple<MessageBox, Element>(boxType, entry));
 			} catch (RuntimeException ex) {
-				System.err.println(PartnerAppFeature.CHAT.name() + " exception during query of chat partner from outbox");
+				System.err.println(SocialappFeature.CHAT.name() + " exception during query of chat partner from outbox");
 				ex.printStackTrace();
 			}
 		}
