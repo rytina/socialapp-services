@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="test" name="com.socialapp.services.test">
+<project basedir="." default="test" name="com.socialapp.services.test" xmlns:jacoco="antlib:org.jacoco.ant">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -17,6 +17,9 @@
         <pathelement location="com.socialapp.services.test/libs/httpcore-4.4.1.jar"/>
         <pathelement location="bin/socialapp-services.jar"/>
     </path>
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="ci-libs/jacocoant.jar"/>
+    </taskdef>
     <target depends="clean" name="init">
 	<mkdir dir="com.socialapp.services/bin"/>
 	<mkdir dir="com.socialapp.services.test/bin"/>
@@ -26,6 +29,8 @@
 	<delete dir="com.socialapp.services/bin"/>
 	<delete dir="com.socialapp.services.test/bin"/>
         <delete dir="bin"/>
+	<delete dir="report"/>
+	<delete dir="junit"/>
     </target>
     <target depends="init" name="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
@@ -47,13 +52,28 @@
     </target>
     <target depends="build" name="test">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" haltonfailure="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="com.socialapp.services.test.SocialappServicesTest" todir="${junit.output.dir}"/>
-            <classpath>
-		 <path refid="classpath"/>
-      		 <pathelement location="com.socialapp.services.test/bin"/>
-	    </classpath>
-        </junit>
+	<jacoco:coverage>
+        	<junit fork="true" forkmode="once" haltonfailure="yes" printsummary="withOutAndErr">
+        	    <formatter type="xml"/>
+        	    <test name="com.socialapp.services.test.SocialappServicesTest" todir="${junit.output.dir}"/>
+        	    <classpath>
+			 <path refid="classpath"/>
+      			 <pathelement location="com.socialapp.services.test/bin"/>
+		    </classpath>
+ 	       </junit>
+	</jacoco:coverage>
+	<jacoco:report>                
+    		<executiondata>
+        		<file file="jacoco.exec"/>
+    		</executiondata> 
+    		<structure name="socialapp services test coverage">
+        		<classfiles>
+				<path id="socialapp-services.jar">
+        				<pathelement location="bin/socialapp-services.jar"/>
+    				</path>
+        		</classfiles>
+    		</structure>         
+    		<html destdir="report"/>        
+	</jacoco:report>
     </target>
 </project>

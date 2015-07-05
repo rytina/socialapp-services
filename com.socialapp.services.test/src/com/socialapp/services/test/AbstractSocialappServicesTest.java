@@ -22,12 +22,12 @@ public class AbstractSocialappServicesTest {
 	
 	
 	protected void waitForCallback() {
-		for (int i = 0; i < 10; i++) { // wait at most 10 seconds
+		for (int i = 0; i < 100; i++) { // wait at most 10 seconds
 			if(this.status != null || this.response != null){
 				return;
 			}
 			try{
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			}catch(InterruptedException ex){
 				// ignore
 			}
