@@ -39,10 +39,6 @@
             <src path="com.socialapp.services/src"/>
             <classpath refid="classpath"/>
         </javac>
-	<copy todir="com.socialapp.services/bin">
-	    <fileset dir="com.socialapp.services/src"
-		     includes="**/*.jpg" />
-	</copy>
 	<jar destfile="bin/socialapp-services.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.socialapp.services.Main"/>
@@ -54,6 +50,10 @@
             <src path="com.socialapp.services.test/src"/>
             <classpath refid="classpath"/>
         </javac>
+	<copy todir="com.socialapp.services.test/bin">
+	    <fileset dir="com.socialapp.services.test/src"
+		     includes="**/*.jpg" />
+	</copy>
     </target>
     <target depends="build" name="test">
         <mkdir dir="${junit.output.dir}"/>
