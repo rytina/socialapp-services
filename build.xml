@@ -16,7 +16,6 @@
         <pathelement location="com.socialapp.services.test/libs/httpclient-4.5.jar"/>
         <pathelement location="com.socialapp.services.test/libs/httpcore-4.4.1.jar"/>
 	<pathelement location="com.socialapp.services.test/libs/commons-codec-1.10.jar"/>
-	<pathelement location="com.socialapp.services.test/src/com/socialapp/services/test/reference.jpg"/>
         <pathelement location="bin/socialapp-services.jar"/>
     </path>
     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
@@ -40,6 +39,10 @@
             <src path="com.socialapp.services/src"/>
             <classpath refid="classpath"/>
         </javac>
+	<copy todir="com.socialapp.services/bin">
+	    <fileset dir="com.socialapp.services/src"
+		     includes="**/*.jpg" />
+	</copy>
 	<jar destfile="bin/socialapp-services.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.socialapp.services.Main"/>
