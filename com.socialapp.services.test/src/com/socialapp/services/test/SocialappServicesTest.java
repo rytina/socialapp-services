@@ -4,11 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
 import com.socialapp.services.IResultProcessor;
@@ -200,5 +206,81 @@ public class SocialappServicesTest extends AbstractSocialappServicesTest{
         assertNotNull("the response must not be null!", response);
         assertEquals("Das Password darf nur aus folgenden Zeichen bestehen: a - Z, 0 - 9, -, _, . und muss mindestens 5 Zeichen lang sein.", response);
 	}
+	
+	@Test
+	public void testUploadImage() throws URISyntaxException {
+	
+		ProcessableCallback<String> callback = new ProcessableCallback<String>(null) {
+
+            public void callback(String url, String resp, AjaxStatus status) {
+            	SocialappServicesTest.this.status = status;
+            	SocialappServicesTest.this.response = resp;
+            }
+
+			@Override
+			public boolean shouldLog() {
+				return false;
+			}
+
+			@Override
+			public String getLogTableName() {
+				return null;
+			}
+        };
+		
+		
+		Map<String, String> params = new HashMap<String, String>();
+
+		params.put("image", getReferenceImageEncodedWithBase64());
+		callback.setParameter(params);
+		callback.header("Content-Type",
+				"application/x-www-form-urlencoded;charset=UTF-8");
+		new AQuery().ajax("http://rytina.net/partnerapp/save_image.php", params, callback);
+        waitForCallback();
+        assertNotNull("the response must not be null!", response);
+        assertEquals("OK\n", response);
+	}
+	
+	public static String getReferenceImageEncodedWithBase64() throws URISyntaxException {
+		String imageDataString = null;
+        File file = new File(SocialappServicesTest.class.getResource("reference.jpg").toURI());
+ 
+        try {            
+            // Reading a Image file from file system
+            InputStream imageInFile = new FileInputStream(file);
+            byte imageData[] = new byte[(int) file.length()];
+            imageInFile.read(imageData);
+ 
+            // Converting Image byte array into Base64 String
+            imageDataString = encodeImage(imageData);
+ 
+            imageInFile.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Image not found" + e);
+        } catch (IOException ioe) {
+            System.out.println("Exception while reading the Image " + ioe);
+        }
+        return imageDataString;
+    }
+	
+	 /**
+     * Encodes the byte array into base64 string
+     *
+     * @param imageByteArray - byte array
+     * @return String a {@link java.lang.String}
+     */
+    public static String encodeImage(byte[] imageByteArray) {
+        return Base64.encodeBase64String(imageByteArray);
+    }
+ 
+    /**
+     * Decodes the base64 string into byte array
+     *
+     * @param imageDataString - a {@link java.lang.String}
+     * @return byte array
+     */
+    public static byte[] decodeImage(String imageDataString) {
+        return Base64.decodeBase64(imageDataString);
+    }
 
 }
