@@ -3,10 +3,8 @@ package com.socialapp.services.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -243,23 +241,23 @@ public class SocialappServicesTest extends AbstractSocialappServicesTest{
 	
 	public static String getReferenceImageEncodedWithBase64() throws URISyntaxException {
 		String imageDataString = null;
-        File file = new File(SocialappServicesTest.class.getResource("reference.jpg").toURI());
- 
-        try {            
-            // Reading a Image file from file system
-            InputStream imageInFile = new FileInputStream(file);
-            byte imageData[] = new byte[(int) file.length()];
-            imageInFile.read(imageData);
+        InputStream in = SocialappServicesTest.class.getResourceAsStream("reference.jpg");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        try {
+        while (true) {
+            int r = in.read(buffer);
+            if (r == -1) break;
+            out.write(buffer, 0, r);
+        }
+        byte[] ret = out.toByteArray();
  
             // Converting Image byte array into Base64 String
-            imageDataString = encodeImage(imageData);
- 
-            imageInFile.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Image not found" + e);
-        } catch (IOException ioe) {
-            System.out.println("Exception while reading the Image " + ioe);
-        }
+            imageDataString = encodeImage(ret);
+            in.close();
+        } catch (Throwable e) {
+        	e.printStackTrace();
+        } 
         return imageDataString;
     }
 	
