@@ -230,6 +230,7 @@ public class SocialappServicesTest extends AbstractSocialappServicesTest{
 		Map<String, String> params = new HashMap<String, String>();
 
 		params.put("image", getReferenceImageEncodedWithBase64());
+		params.put("imagename", "someimagename.jpg");
 		callback.setParameter(params);
 		callback.header("Content-Type",
 				"application/x-www-form-urlencoded;charset=UTF-8");
