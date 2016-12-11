@@ -19,7 +19,7 @@ public class SocialappServiceConstants {
 		_id					// 8.
 	}
 	
-	public static final String SOCIAL_APP_VERSION = "18.0";
+	public static final String SOCIAL_APP_VERSION = "19.0";
 	
 	public static final String PARAMETER_SEARCH_LOCATION = "PARAMETER_SEARCH_LOCATION";
 	
